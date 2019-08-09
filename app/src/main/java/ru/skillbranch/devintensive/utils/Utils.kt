@@ -88,6 +88,7 @@ object Utils {
                     firstName = buf
                     buf = ""
                 }
+                else -> buf += s.toString()
             }
         lastName = buf
 
