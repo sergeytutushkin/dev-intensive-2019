@@ -47,7 +47,7 @@ data class User(
         var avatar: String? = "",
         var rating: Int = 0,
         var respect: Int = 0,
-        var lastVisit: Date = Date(),
+        var lastVisit: Date? = Date(),
         var isOnline: Boolean = false
     ) {
         fun id(id: String) = apply { this.id = id }

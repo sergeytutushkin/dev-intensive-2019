@@ -13,8 +13,6 @@ object Utils {
 
     fun transliteration(payload: String, divider: String = " "): String {
         var buf = ""
-        var firstName = ""
-        val lastName: String
 
         for (s in payload)
             when (s) {
@@ -84,15 +82,11 @@ object Utils {
                 'Э' -> buf += "E"
                 'Ю' -> buf += "Yu"
                 'Я' -> buf += "Ya"
-                ' ' -> {
-                    firstName = buf
-                    buf = ""
-                }
+                ' ' -> buf += divider
                 else -> buf += s.toString()
             }
-        lastName = buf
 
-        return firstName + divider + lastName
+        return buf
     }
 
     fun toInitials(firstName: String?, lastName: String?): String? {
