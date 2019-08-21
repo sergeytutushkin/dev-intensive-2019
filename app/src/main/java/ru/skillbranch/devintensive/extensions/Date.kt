@@ -76,13 +76,11 @@ enum class TimeUnits(
     DAY("дней", "день", "дня");
 
     fun plural(value: Int): String {
-        val newValue = when (value % 10) {
+        return when (value % 10) {
             0, 5, 6, 7, 8, 9 -> "$value $value1"
             1 -> "$value $value2"
             2, 3, 4 -> "$value $value3"
             else -> ""
         }
-
-        return newValue
     }
 }
