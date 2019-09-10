@@ -3,4 +3,10 @@
     <string name="text_enter_answer">Введите текст</string>
     <string name="description_bender_dance">Bender dance</string>
     <string name="description_send">Send</string>
+    <string name="profile_label_rating">Рейтинг</string>
+    <string name="profile_label_respect">Уважение</string>
+    <string name="profile_hint_repository">Репозиторий</string>
+    <string name="profile_hint_about">О себе</string>
+    <string name="profile_hint_last_name">Фамилия</string>
+    <string name="profile_hint_first_name">Имя</string>
 </resources>
