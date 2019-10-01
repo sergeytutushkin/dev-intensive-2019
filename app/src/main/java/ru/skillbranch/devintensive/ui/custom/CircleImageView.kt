@@ -10,6 +10,7 @@ import android.util.AttributeSet
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
+import androidx.annotation.Dimension.DP
 import ru.skillbranch.devintensive.R
 import kotlin.math.min
 
@@ -23,8 +24,11 @@ class CircleImageView @JvmOverloads constructor(
     companion object {
         private const val DEFAULT_BORDER_COLOR = Color.WHITE
         private const val DEFAULT_BORDER_WIDTH = 2
+
         private const val COLOR_DRAWABLE_DIMENSION = 2
         private val BITMAP_CONFIG = Bitmap.Config.ARGB_8888
+
+        private val SCALE_TYPE = ScaleType.CENTER_CROP
     }
 
     private var mColorFilter: ColorFilter? = null
@@ -34,7 +38,7 @@ class CircleImageView @JvmOverloads constructor(
     private val mDrawableRect = RectF()
     private val mBorderRect = RectF()
 
-    private var mBitmapShader: Shader? = null
+    private var mBitmapShader: BitmapShader? = null
     private var mBitmap: Bitmap? = null
     private var mBitmapWidth: Int = 0
     private var mBitmapHeight: Int = 0
@@ -77,13 +81,58 @@ class CircleImageView @JvmOverloads constructor(
         }
     }
 
+    @Dimension(unit = DP)
+    fun getBorderWidth() = borderWidth
+
+    fun setBorderWidth(@Dimension(unit = DP) dp: Int) {
+        if (dp == borderWidth) {
+            return
+        }
+
+        borderWidth = dp
+        setup()
+    }
+
+    fun getBorderColor() = borderColor
+
+    fun setBorderColor(hex: String) {
+        val colorId = Color.parseColor(hex)
+
+        if (colorId == borderColor) {
+            return
+        }
+
+        borderColor = colorId
+        mBorderPaint.color = borderColor
+        invalidate()
+    }
+
+    fun setBorderColor(@ColorRes colorId: Int) {
+        if (colorId == borderColor) {
+            return
+        }
+
+        borderColor = colorId
+        mBorderPaint.color = borderColor
+        invalidate()
+    }
+
     private fun init() {
+        super.setScaleType(SCALE_TYPE)
         mReady = true
 
         if (mSetupPending) {
             setup()
             mSetupPending = false
         }
+    }
+
+    override fun getScaleType(): ScaleType {
+        return SCALE_TYPE
+    }
+
+    override fun setScaleType(scaleType: ScaleType?) {
+        require(scaleType == SCALE_TYPE) { "ScaleType $scaleType not supported." }
     }
 
     private fun setup() {
@@ -101,7 +150,7 @@ class CircleImageView @JvmOverloads constructor(
             return
         }
 
-        mBitmapShader = BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        mBitmapShader = BitmapShader(mBitmap!!, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
 
         mBitmapPaint.shader = mBitmapShader
 
@@ -213,42 +262,6 @@ class CircleImageView @JvmOverloads constructor(
 
     private fun applyColorFilter() {
         mBitmapPaint.colorFilter = mColorFilter
-    }
-
-    @Dimension
-    fun getBorderWidth() = borderWidth
-
-    fun setBorderWidth(@Dimension dp: Int) {
-        if (dp == borderWidth) {
-            return
-        }
-
-        borderWidth = dp
-        setup()
-    }
-
-    fun getBorderColor() = borderColor
-
-    fun setBorderColor(hex: String) {
-        val colorId = Color.parseColor(hex)
-
-        if (colorId == borderColor) {
-            return
-        }
-
-        borderColor = colorId
-        mBorderPaint.color = borderColor
-        invalidate()
-    }
-
-    fun setBorderColor(@ColorRes colorId: Int) {
-        if (colorId == borderColor) {
-            return
-        }
-
-        borderColor = colorId
-        mBorderPaint.color = borderColor
-        invalidate()
     }
 
     override fun onDraw(canvas: Canvas?) {

@@ -91,11 +91,8 @@ object Utils {
 
     fun toInitials(firstName: String?, lastName: String?): String? {
 
-        val firstInitial: String?
-        val lastInitial: String?
-
-        if (firstName.isNullOrBlank()) firstInitial = "" else firstInitial = firstName.get(0).toString()
-        if (lastName.isNullOrBlank()) lastInitial = "" else lastInitial = lastName.get(0).toString()
+        val firstInitial = if (firstName.isNullOrBlank()) "" else firstName.first().toString()
+        val lastInitial = if (lastName.isNullOrBlank()) "" else lastName.first().toString()
 
         if (firstInitial == "" && lastInitial == "") return null
 
