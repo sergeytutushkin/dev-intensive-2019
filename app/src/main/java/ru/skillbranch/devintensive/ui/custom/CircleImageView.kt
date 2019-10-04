@@ -2,6 +2,7 @@ package ru.skillbranch.devintensive.ui.custom
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.Color.parseColor
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
 import androidx.annotation.Dimension.DP
+import androidx.core.content.ContextCompat.getColor
 import ru.skillbranch.devintensive.R
 import kotlin.math.min
 
@@ -92,23 +94,13 @@ class CircleImageView @JvmOverloads constructor(
     fun getBorderColor() = borderColor
 
     fun setBorderColor(hex: String) {
-        val colorId = Color.parseColor(hex)
-
-        if (colorId == borderColor) {
-            return
-        }
-
-        borderColor = colorId
+        borderColor = parseColor(hex)
         mBorderPaint.color = borderColor
         invalidate()
     }
 
     fun setBorderColor(@ColorRes colorId: Int) {
-        if (colorId == borderColor) {
-            return
-        }
-
-        borderColor = colorId
+        borderColor = getColor(context, colorId)
         mBorderPaint.color = borderColor
         invalidate()
     }
