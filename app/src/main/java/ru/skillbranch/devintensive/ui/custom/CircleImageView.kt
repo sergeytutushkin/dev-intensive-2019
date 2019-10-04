@@ -33,7 +33,7 @@ class CircleImageView @JvmOverloads constructor(
 
     private var mColorFilter: ColorFilter? = null
     private var borderColor = DEFAULT_BORDER_COLOR
-    private var borderWidth = DEFAULT_BORDER_WIDTH * resources.displayMetrics.density.toInt()
+    private var borderWidth = (DEFAULT_BORDER_WIDTH * resources.displayMetrics.density).toInt()
 
     private val mDrawableRect = RectF()
     private val mBorderRect = RectF()
@@ -82,7 +82,7 @@ class CircleImageView @JvmOverloads constructor(
     }
 
     @Dimension(unit = DP)
-    fun getBorderWidth() = borderWidth / resources.displayMetrics.density
+    fun getBorderWidth(): Int = (borderWidth / resources.displayMetrics.density).toInt()
 
     fun setBorderWidth(@Dimension(unit = DP) dp: Int) {
         borderWidth = (dp * resources.displayMetrics.density).toInt()
