@@ -3,6 +3,8 @@ package ru.skillbranch.devintensive.ui.profile
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.EditText
@@ -79,6 +81,28 @@ class ProfileActivity : AppCompatActivity() {
         btn_switch_theme.setOnClickListener {
             viewModel.switchTheme()
         }
+
+        et_repository.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                if (p0.isNullOrBlank()) {
+                    wr_repository.error = ""
+                } else {
+                    val regexRepo =
+                        Regex("^(https:\\/\\/)?(www\\.)?(github\\.com\\/)(?!enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join)[a-zA-Z_\\-\\d]+(\\/)?\$")
+                    if (regexRepo.matches(p0)) {
+                        wr_repository.error = ""
+                    } else {
+                        wr_repository.error = "Невалидный адрес репозитория"
+                    }
+                }
+            }
+        })
     }
 
     private fun showCurrentMode(isEdit: Boolean) {
