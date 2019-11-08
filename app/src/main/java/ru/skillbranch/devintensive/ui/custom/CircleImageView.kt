@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.annotation.Dimension
@@ -103,6 +104,32 @@ class CircleImageView @JvmOverloads constructor(
         borderColor = getColor(context, colorId)
         mBorderPaint.color = borderColor
         invalidate()
+    }
+
+    fun drawDefaultAvatar(
+        initials: String, @Dimension(unit = DP) textSize: Float = 48F,
+        textColor: Int = Color.WHITE
+    ): Bitmap {
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            this.textSize = textSize * resources.displayMetrics.density
+            color = textColor
+            textAlign = Paint.Align.CENTER
+        }
+
+        val textBounds = Rect()
+        paint.getTextBounds(initials, 0, initials.length, textBounds)
+        val backgroundBounds = RectF()
+        backgroundBounds.set(0F, 0F, layoutParams.width.toFloat(), layoutParams.height.toFloat())
+        val textBottom = backgroundBounds.centerY() - textBounds.exactCenterY()
+        val image =
+            Bitmap.createBitmap(layoutParams.width, layoutParams.height, Bitmap.Config.ARGB_8888)
+        val value = TypedValue()
+        context.theme.resolveAttribute(R.attr.colorAccent, value, true)
+        image.eraseColor(value.data)
+        val canvas = Canvas(image)
+        canvas.drawText(initials, backgroundBounds.centerX(), textBottom, paint)
+
+        return image
     }
 
     private fun init() {

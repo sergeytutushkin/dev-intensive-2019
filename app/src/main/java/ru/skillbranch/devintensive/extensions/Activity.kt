@@ -8,8 +8,6 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 fun Activity.hideKeyboard() {
-//    val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-//    imm?.hideSoftInputFromWindow(v.windowToken, 0)
     val view = this.currentFocus
     view?.let { v ->
         val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
@@ -29,7 +27,7 @@ fun Context.convertDpToPx(dp: Float): Float {
     )
 }
 
-fun Activity.isKeyboardOpen (): Boolean {
+fun Activity.isKeyboardOpen(): Boolean {
     val visibleBounds = Rect()
     this.getRootView().getWindowVisibleDisplayFrame(visibleBounds)
     val heightDiff = getRootView().height - visibleBounds.height()
@@ -37,6 +35,6 @@ fun Activity.isKeyboardOpen (): Boolean {
     return heightDiff > marginOfError
 }
 
-fun Activity.isKeyboardClosed (): Boolean {
+fun Activity.isKeyboardClosed(): Boolean {
     return !this.isKeyboardOpen()
 }

@@ -23,8 +23,8 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: ProfileViewModel
-    var isEditMode = false
-    lateinit var viewFields: Map<String, TextView>
+    private lateinit var viewFields: Map<String, TextView>
+    private var isEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -42,6 +42,17 @@ class ProfileActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModel.getProfileData().observe(this, Observer { updateUI(it) })
         viewModel.getTheme().observe(this, Observer { updateTheme(it) })
+        viewModel.isRepositoryValid().observe(this, Observer { checkUrlRepository(it) })
+    }
+
+    private fun checkUrlRepository(isValid: Boolean) {
+        if (isValid) {
+            wr_repository.error = null
+            wr_repository.isErrorEnabled = false
+        } else {
+            wr_repository.error = "Невалидный адрес репозитория"
+            wr_repository.isErrorEnabled = true
+        }
     }
 
     private fun updateTheme(mode: Int) {
@@ -54,6 +65,8 @@ class ProfileActivity : AppCompatActivity() {
             for ((k, v) in viewFields) {
                 v.text = it[k].toString()
             }
+
+            iv_avatar.setImageBitmap(iv_avatar.drawDefaultAvatar(it["initials"].toString()))
         }
     }
 
@@ -73,6 +86,8 @@ class ProfileActivity : AppCompatActivity() {
         showCurrentMode(isEditMode)
 
         btn_edit.setOnClickListener {
+            if (wr_repository.isErrorEnabled) et_repository.text.clear()
+
             if (isEditMode) saveProfileInfo()
             isEditMode = !isEditMode
             showCurrentMode(isEditMode)
@@ -90,17 +105,7 @@ class ProfileActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (p0.isNullOrBlank()) {
-                    wr_repository.error = ""
-                } else {
-                    val regexRepo =
-                        Regex("^(https:\\/\\/)?(www\\.)?(github\\.com\\/)(?!enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join)[a-zA-Z_\\-\\d]+(\\/)?\$")
-                    if (regexRepo.matches(p0)) {
-                        wr_repository.error = ""
-                    } else {
-                        wr_repository.error = "Невалидный адрес репозитория"
-                    }
-                }
+                viewModel.repositoryValidation(p0.toString())
             }
         })
     }
