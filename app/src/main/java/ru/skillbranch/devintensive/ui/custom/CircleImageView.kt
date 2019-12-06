@@ -302,7 +302,7 @@ class CircleImageView @JvmOverloads constructor(
     }
 
     private fun initializeBitmap() {
-        mBitmap = getBitmapFromDrawable(drawable)!!
+        mBitmap = getBitmapFromDrawable(drawable)
         setup()
     }
 
