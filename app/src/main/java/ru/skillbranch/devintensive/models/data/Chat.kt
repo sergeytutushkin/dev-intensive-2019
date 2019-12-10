@@ -27,8 +27,8 @@ data class Chat(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     fun lastMessageShort(): Pair<String, String?> = when (val lastMessage = messages.lastOrNull()) {
-        is TextMessage -> lastMessage.text.orEmpty() to "${lastMessage.from.firstName.orEmpty()} ${lastMessage.from.lastName.orEmpty()}"
-        is ImageMessage -> "${lastMessage.from.firstName} - отправил фото" to "${lastMessage.from.firstName.orEmpty()} ${lastMessage.from.lastName.orEmpty()}"
+        is TextMessage -> lastMessage.text.orEmpty() to lastMessage.from.firstName.orEmpty()
+        is ImageMessage -> "${lastMessage.from.firstName} - отправил фото" to lastMessage.from.firstName.orEmpty()
         else -> "Сообщений еще нет" to "@John_Doe"
     }
 
